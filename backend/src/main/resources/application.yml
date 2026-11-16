@@ -1,0 +1,45 @@
+server:
+  port: ${SERVER_PORT:8080}
+  compression:
+    enabled: true
+    mime-types: text/html,text/css,application/javascript,application/json
+    min-response-size: 1024
+
+spring:
+  application:
+    name: note-up
+  datasource:
+    url: jdbc:sqlite:${DB_PATH:./data/notes.db}?journal_mode=WAL&busy_timeout=10000&foreign_keys=on&synchronous=NORMAL
+    driver-class-name: org.sqlite.JDBC
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 1
+      connection-timeout: 30000
+  sql:
+    init:
+      mode: always
+      continue-on-error: false
+  jackson:
+    default-property-inclusion: non_null
+
+app:
+  vault-root: ${VAULT_ROOT:../sample-vault}
+  hook-token: ${HOOK_TOKEN:dev-hook-token}
+  index-on-startup: ${INDEX_ON_STARTUP:true}
+  seed-demo-data: ${SEED_DEMO_DATA:false}
+  cors-origins: ${CORS_ORIGINS:http://localhost:5173,http://localhost:4173}
+  jwt:
+    secret: ${JWT_SECRET:note-up-dev-secret-change-me-in-production-0123456789}
+    expiration-hours: ${JWT_EXPIRATION_HOURS:168}
+  admin:
+    username: ${ADMIN_USERNAME:admin}
+    password: ${ADMIN_PASSWORD:admin123}
+  comments:
+    per-minute: 3
+    per-day: 50
+    max-length: 2000
+
+logging:
+  level:
+    root: INFO
+    com.noteup: INFO
